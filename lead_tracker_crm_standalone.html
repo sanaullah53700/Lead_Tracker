@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Tracker — Commercial B2B SaaS CRM Data Sheet</title>
+  <meta name="description" content="Commercial B2B SaaS Lead Tracker CRM Data Table for sales teams.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg-app: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F1F5F9;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --text-light: #94A3B8;
+      --border-color: #E2E8F0;
+      --border-focus: #2563EB;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --primary-light: #EFF6FF;
+
+      --stage-new-bg: #F0F9FF;
+      --stage-new-text: #0284C7;
+      --stage-new-border: #BAE6FD;
+
+      --stage-contacted-bg: #FFFBEB;
+      --stage-contacted-text: #D97706;
+      --stage-contacted-border: #FDE68A;
+
+      --stage-converted-bg: #ECFDF5;
+      --stage-converted-text: #059669;
+      --stage-converted-border: #A7F3D0;
+
+      --source-fb-bg: #EFF6FF;
+      --source-fb-text: #1D4ED8;
+      --source-fb-border: #BFDBFE;
+
+      --source-web-bg: #F0FDFA;
+      --source-web-text: #0F766E;
+      --source-web-border: #99F6E4;
+
+      --source-ref-bg: #F5F3FF;
+      --source-ref-text: #6D28D9;
+      --source-ref-border: #DDD6FE;
+
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 14px -2px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 20px 36px -6px rgba(15, 23, 42, 0.12);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-pill: 9999px;
+      --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-family); background-color: var(--bg-app); color: var(--text-main); -webkit-font-smoothing: antialiased; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* Custom Visible Scrollbars for Modals and Forms */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 4px; border: 2px solid #F1F5F9; }
+    ::-webkit-scrollbar-thumb:hover { background: #2563EB; }
+
+    .modal-scrollable-body::-webkit-scrollbar,
+    .modal-scrollable-list::-webkit-scrollbar { width: 7px; }
+    .modal-scrollable-body::-webkit-scrollbar-track,
+    .modal-scrollable-list::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
+    .modal-scrollable-body::-webkit-scrollbar-thumb,
+    .modal-scrollable-list::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 4px; }
+    .modal-scrollable-body::-webkit-scrollbar-thumb:hover,
+    .modal-scrollable-list::-webkit-scrollbar-thumb:hover { background: #2563EB; }
+
+    /* Animated Ambient Background */
+    .app-viewport { position: relative; min-height: 100vh; width: 100%; }
+    .ambient-bg-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-grid-pattern {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px; opacity: 0.85;
+    }
+    .ambient-orb { position: absolute; border-radius: 50%; filter: blur(95px); opacity: 0.55; mix-blend-mode: multiply; }
+    .orb-top-left { top: -140px; left: -120px; width: 650px; height: 650px; background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, transparent 70%); animation: float1 24s ease-in-out infinite alternate; }
+    .orb-top-right { top: -100px; right: -140px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(124, 58, 237, 0.14) 0%, transparent 70%); animation: float2 28s ease-in-out infinite alternate; }
+
+    @keyframes float1 { 0% { transform: translate(0,0); } 100% { transform: translate(45px,30px); } }
+    @keyframes float2 { 0% { transform: translate(0,0); } 100% { transform: translate(-40px,35px); } }
+
+    .app-container { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; max-width: 1536px; margin: 0 auto; padding: 1.5rem 2rem; }
+
+    /* Header & 5 KPI Cards */
+    .top-header { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 1.5rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); background-color: var(--bg-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .header-brand-row { display: flex; justify-content: space-between; align-items: center; }
+    .brand-section { display: flex; align-items: center; gap: 0.85rem; }
+    .brand-icon-wrapper { width: 44px; height: 44px; border-radius: var(--radius-md); background: linear-gradient(135deg, #2563EB, #1D4ED8); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; }
+    .brand-titles h1 { font-size: 1.35rem; font-weight: 700; color: var(--text-main); }
+    .brand-titles p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .kpi-metrics-row-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.85rem; padding-top: 0.75rem; border-top: 1px solid #F1F5F9; }
+    .kpi-card { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; background-color: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+    .kpi-icon-box { width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .kpi-blue { background: #EFF6FF; color: #2563EB; }
+    .kpi-sky { background: #F0F9FF; color: #0284C7; }
+    .kpi-amber { background: #FFFBEB; color: #D97706; }
+    .kpi-emerald { background: #ECFDF5; color: #059669; }
+    .kpi-green { background: #F0FDF4; color: #16A34A; }
+    .kpi-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .kpi-value { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background-color: var(--primary); color: white; border: none; padding: 0.65rem 1.25rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all var(--transition-fast); }
+    .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+
+    .btn-secondary { display: inline-flex; align-items: center; gap: 0.4rem; background: #FFF; color: var(--text-main); border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: var(--radius-md); font-weight: 500; font-size: 0.85rem; cursor: pointer; }
+
+    /* Toolbar */
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; background-color: var(--bg-surface); padding: 0.85rem 1.25rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); flex-wrap: wrap; }
+    .toolbar-controls { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+    .search-input, .filter-select { padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.875rem; outline: none; background: #FFF; }
+    .search-input { width: 100%; max-width: 360px; }
+
+    /* Data Table */
+    .data-table-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; }
+    .table-responsive-wrapper { overflow-x: auto; flex: 1; }
+    .crm-data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+    .crm-data-table thead { background: #FAFAFA; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; }
+    .crm-data-table th { padding: 0.85rem 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; cursor: pointer; }
+    .crm-data-table td { padding: 0.85rem 1rem; border-bottom: 1px solid #F1F5F9; vertical-align: middle; }
+    .table-data-row:nth-child(even) { background-color: #FAFAFA; }
+    .table-data-row:hover { background-color: #F8FAFC; }
+
+    .company-name-text { font-weight: 700; color: var(--text-main); font-size: 0.9rem; }
+    .role-badge-text { font-size: 0.775rem; font-weight: 600; color: var(--text-main); background: var(--bg-subtle); padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); white-space: nowrap; }
+    .lead-identity-cell { display: flex; align-items: center; gap: 0.65rem; }
+    .lead-avatar-sm { width: 32px; height: 32px; border-radius: 50%; border: 1px solid; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .lead-name-text { font-weight: 600; color: var(--text-main); }
+    .contacts-count-pill { font-size: 0.7rem; font-weight: 700; color: var(--primary); background: var(--primary-light); border: 1px solid var(--source-fb-border); padding: 0.15rem 0.45rem; border-radius: var(--radius-pill); cursor: pointer; }
+
+    /* DISPLAY ONLY STATUS BADGE */
+    .display-status-badge { display: inline-flex; padding: 0.3rem 0.75rem; border-radius: var(--radius-pill); font-size: 0.775rem; font-weight: 700; border: 1px solid transparent; }
+    .display-status-badge[data-stage="New Lead"] { background: var(--stage-new-bg); color: var(--stage-new-text); border-color: var(--stage-new-border); }
+    .display-status-badge[data-stage="Contacted"] { background: var(--stage-contacted-bg); color: var(--stage-contacted-text); border-color: var(--stage-contacted-border); }
+    .display-status-badge[data-stage="Converted"] { background: var(--stage-converted-bg); color: var(--stage-converted-text); border-color: var(--stage-converted-border); }
+
+    .comment-sheet-preview { display: flex; align-items: center; gap: 0.4rem; background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.35rem 0.65rem; border-radius: var(--radius-md); cursor: pointer; font-size: 0.775rem; color: var(--text-main); }
+    .source-badge { font-size: 0.725rem; font-weight: 600; padding: 0.18rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid transparent; }
+    .source-badge[data-source="Facebook"] { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+    .source-badge[data-source="Website"] { background: #F0FDFA; color: #0F766E; border-color: #99F6E4; }
+    .source-badge[data-source="Referral"] { background: #F5F3FF; color: #6D28D9; border-color: #DDD6FE; }
+    .deal-value-text { font-weight: 700; color: var(--text-main); }
+
+    .table-pagination-footer { padding: 0.85rem 1.25rem; border-top: 1px solid var(--border-color); background: #FAFAFA; display: flex; justify-content: space-between; align-items: center; font-size: 0.825rem; }
+
+    /* Modal Layouts with Styled Scrollbars */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+    .modal-card { background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); width: 100%; max-width: 580px; box-shadow: var(--shadow-lg); overflow: hidden; max-height: 90vh; display: flex; flex-direction: column; }
+    .modal-header { padding: 1.1rem 1.35rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: #FAFAFA; }
+    .modal-body { padding: 1.25rem 1.35rem; display: flex; flex-direction: column; gap: 1.1rem; overflow-y: auto; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+    .form-input, .form-select, .comment-textarea { padding: 0.6rem 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.875rem; width: 100%; }
+    .modal-footer { padding: 0.9rem 1.35rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.65rem; background: #FAFAFA; }
+
+    .primary-contact-box { display: flex; gap: 0.85rem; padding: 0.85rem; background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+    .timeline-comment-item { padding: 0.75rem; background: #FFF; border: 1px solid var(--border-color); border-left: 3px solid var(--primary); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.5rem; }
+
+    .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 1100; }
+    .toast { background: var(--text-main); color: white; padding: 0.7rem 1rem; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); font-size: 0.85rem; font-weight: 500; border-left: 4px solid #10B981; }
+
+    @media (max-width: 1200px) { .kpi-metrics-row-5 { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) {
+      .app-container { padding: 0.85rem; }
+      .kpi-metrics-row-5 { grid-template-columns: 1fr; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const STAGES = { NEW_LEAD: 'New Lead', CONTACTED: 'Contacted', CONVERTED: 'Converted' };
+    const SOURCES = ['Facebook', 'Website', 'Referral'];
+
+    const INITIAL_LEADS = [
+      {
+        id: 'lead-1',
+        companyName: 'Nexus Enterprise Solutions',
+        employees: [
+          { name: 'Tariq Mahmood', role: 'Chief Technology Officer', phone: '03001112233', email: 'tariq@nexuses.com' },
+          { name: 'Saima Noor', role: 'VP of Operations', phone: '03002223344', email: 'saima@nexuses.com' }
+        ],
+        source: 'Facebook', status: STAGES.NEW_LEAD, value: '$4,500',
+        comments: [
+          { id: 'c-1', employeeName: 'Tariq Mahmood', text: 'Tariq Mahmood evaluated cloud security architecture for 40 enterprise nodes.', timestamp: 'Aug 16, 2026 • 10:30 AM' },
+          { id: 'c-2', employeeName: 'Saima Noor', text: 'Saima Noor approved SLAs for annual maintenance package.', timestamp: 'Aug 16, 2026 • 02:15 PM' }
+        ]
+      },
+      {
+        id: 'lead-2',
+        companyName: 'Vertex Global Dynamics',
+        employees: [
+          { name: 'Zain Malik', role: 'Head of Procurement', phone: '03013334455', email: 'zain@vertexgd.com' },
+          { name: 'Hira Shah', role: 'Finance Lead', phone: '03014445566', email: 'hira@vertexgd.com' }
+        ],
+        source: 'Website', status: STAGES.CONTACTED, value: '$8,900',
+        comments: [
+          { id: 'c-3', employeeName: 'Zain Malik', text: 'Zain Malik submitted vendor registration checklist and tax filings.', timestamp: 'Aug 15, 2026 • 11:40 AM' },
+          { id: 'c-4', employeeName: 'Hira Shah', text: 'Hira Shah confirmed Q3 budget allocation for $8,900 deal value.', timestamp: 'Aug 17, 2026 • 04:20 PM' }
+        ]
+      },
+      {
+        id: 'lead-3',
+        companyName: 'Horizon Logistics Inc',
+        employees: [
+          { name: 'Bilal Ahmed', role: 'Logistics Director', phone: '03025556677', email: 'bilal@horizonlogistics.org' },
+          { name: 'Usman Farooq', role: 'Fleet Manager', phone: '03026667788', email: 'usman@horizonlogistics.org' }
+        ],
+        source: 'Referral', status: STAGES.NEW_LEAD, value: '$12,000',
+        comments: [
+          { id: 'c-5', employeeName: 'Bilal Ahmed', text: 'Bilal Ahmed requested mobile fleet tracking integration module.', timestamp: 'Aug 17, 2026 • 09:00 AM' },
+          { id: 'c-6', employeeName: 'Usman Farooq', text: 'Usman Farooq tested driver dispatch notification webhooks.', timestamp: 'Aug 17, 2026 • 11:15 AM' }
+        ]
+      },
+      {
+        id: 'lead-4',
+        companyName: 'Quantum Software Labs',
+        employees: [
+          { name: 'Kashif Raza', role: 'Engineering Lead', phone: '03037778899', email: 'kashif@quantumlabs.io' },
+          { name: 'Ayesha Tariq', role: 'Product Manager', phone: '03038889900', email: 'ayesha@quantumlabs.io' }
+        ],
+        source: 'Referral', status: STAGES.CONTACTED, value: '$6,200',
+        comments: [
+          { id: 'c-7', employeeName: 'Kashif Raza', text: 'Kashif Raza requested dedicated staging environment and API keys.', timestamp: 'Aug 14, 2026 • 03:30 PM' },
+          { id: 'c-8', employeeName: 'Ayesha Tariq', text: 'Ayesha Raza requested custom reporting analytics dashboard.', timestamp: 'Aug 15, 2026 • 01:20 PM' }
+        ]
+      },
+      {
+        id: 'lead-5',
+        companyName: 'Beacon Media & Marketing',
+        employees: [
+          { name: 'Sarah Khan', role: 'Creative Director', phone: '03049990011', email: 'sarah@beaconmedia.co' },
+          { name: 'Hamza Hassan', role: 'Digital Strategist', phone: '03041112233', email: 'hamza@beaconmedia.co' }
+        ],
+        source: 'Website', status: STAGES.CONVERTED, value: '$5,000',
+        comments: [
+          { id: 'c-9', employeeName: 'Sarah Khan', text: 'Sarah Khan signed contract for 12 multi-channel campaign accounts.', timestamp: 'Aug 10, 2026 • 01:15 PM' },
+          { id: 'c-10', employeeName: 'Hamza Hassan', text: 'Hamza Hassan configured Facebook Lead Ad integration endpoints.', timestamp: 'Aug 11, 2026 • 03:00 PM' }
+        ]
+      },
+      {
+        id: 'lead-6',
+        companyName: 'Apex Biotech Holdings',
+        employees: [
+          { name: 'Dr. Asad Iqbal', role: 'Chief Research Officer', phone: '03052223344', email: 'asad@apexbiotech.com' },
+          { name: 'Maria Fernandez', role: 'Compliance Officer', phone: '03053334455', email: 'maria@apexbiotech.com' }
+        ],
+        source: 'Referral', status: STAGES.CONVERTED, value: '$9,400',
+        comments: [
+          { id: 'c-11', employeeName: 'Dr. Asad Iqbal', text: 'Dr. Asad Iqbal finalized HIPAA compliance data residency terms.', timestamp: 'Aug 12, 2026 • 05:00 PM' },
+          { id: 'c-12', employeeName: 'Maria Fernandez', text: 'Maria Fernandez requested ISO-27001 audit certificate copy.', timestamp: 'Aug 13, 2026 • 10:30 AM' }
+        ]
+      },
+      {
+        id: 'lead-7',
+        companyName: 'Vanguard Retail Group',
+        employees: [
+          { name: 'Omer Sheikh', role: 'Regional Director', phone: '03064445566', email: 'omer@vanguardretail.com' },
+          { name: 'Zainab Qureshi', role: 'Retail Analyst', phone: '03065556677', email: 'zainab@vanguardretail.com' }
+        ],
+        source: 'Facebook', status: STAGES.NEW_LEAD, value: '$7,800',
+        comments: [
+          { id: 'c-13', employeeName: 'Omer Sheikh', text: 'Omer Sheikh inquired about POS inventory sync for 25 store locations.', timestamp: 'Aug 16, 2026 • 04:45 PM' },
+          { id: 'c-14', employeeName: 'Zainab Qureshi', text: 'Zainab Qureshi scheduled end-user training session for sales staff.', timestamp: 'Aug 17, 2026 • 02:00 PM' }
+        ]
+      },
+      {
+        id: 'lead-8',
+        companyName: 'Crestline Advisory Services',
+        employees: [
+          { name: 'Faisal Javed', role: 'Managing Partner', phone: '03076667788', email: 'faisal@crestlineadvisory.net' },
+          { name: 'Nida Ali', role: 'Senior Consultant', phone: '03077778899', email: 'nida@crestlineadvisory.net' }
+        ],
+        source: 'Website', status: STAGES.CONTACTED, value: '$3,900',
+        comments: [
+          { id: 'c-15', employeeName: 'Faisal Javed', text: 'Faisal Javed requested retainer proposal for quarterly CRM audit.', timestamp: 'Aug 15, 2026 • 02:20 PM' },
+          { id: 'c-16', employeeName: 'Nida Ali', text: 'Nida Ali completed initial workflow discovery assessment.', timestamp: 'Aug 16, 2026 • 05:10 PM' }
+        ]
+      }
+    ];
+
+    function getInitials(name) {
+      if (!name) return 'LD';
+      const parts = name.trim().split(/\s+/);
+      return parts.length === 1 ? parts[0].slice(0, 2).toUpperCase() : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function getAvatarColor(name) {
+      const colors = [
+        { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE' },
+        { bg: '#F0FDF4', text: '#15803D', border: '#BBF7D0' },
+        { bg: '#FAF5FF', text: '#6B21A8', border: '#E9D5FF' }
+      ];
+      let hash = 0;
+      for (let i = 0; i < (name || '').length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return colors[Math.abs(hash) % colors.length];
+    }
+
+    function App() {
+      const [leads, setLeads] = React.useState(() => {
+        try {
+          const saved = localStorage.getItem('lead_tracker_crm_leads_v2');
+          return saved ? JSON.parse(saved) : INITIAL_LEADS;
+        } catch(e) { return INITIAL_LEADS; }
+      });
+
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [sourceFilter, setSourceFilter] = React.useState('All');
+      const [statusFilter, setStatusFilter] = React.useState('All');
+      const [sortField, setSortField] = React.useState('companyName');
+      const [sortDirection, setSortDirection] = React.useState('asc');
+
+      const [isModalOpen, setIsModalOpen] = React.useState(false);
+      const [editLead, setEditLead] = React.useState(null);
+      const [detailsLead, setDetailsLead] = React.useState(null);
+      const [toast, setToast] = React.useState(null);
+
+      React.useEffect(() => {
+        localStorage.setItem('lead_tracker_crm_leads_v2', JSON.stringify(leads));
+      }, [leads]);
+
+      const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
+
+      const resetSeed = () => {
+        localStorage.removeItem('lead_tracker_crm_leads_v2');
+        setLeads(INITIAL_LEADS);
+        showToast('Reset sample data');
+      };
+
+      const handleSort = (field) => {
+        if (sortField === field) setSortDirection(p => p === 'asc' ? 'desc' : 'asc');
+        else { setSortField(field); setSortDirection('asc'); }
+      };
+
+      const filteredAndSorted = React.useMemo(() => {
+        let res = leads.filter(l => {
+          const q = searchQuery.toLowerCase();
+          const matchesCompany = (l.companyName||'').toLowerCase().includes(q);
+          const matchesEmp = (l.employees||[]).some(e => (e.name||'').toLowerCase().includes(q) || (e.role||'').toLowerCase().includes(q) || (e.phone||'').includes(q) || (e.email||'').toLowerCase().includes(q));
+          const matchesComments = (l.comments||[]).some(c => (c.text||'').toLowerCase().includes(q) || (c.employeeName||'').toLowerCase().includes(q));
+          const matchesSearch = !q || matchesCompany || matchesEmp || matchesComments;
+          const matchesSource = sourceFilter === 'All' || l.source === sourceFilter;
+          const matchesStatus = statusFilter === 'All' || l.status === statusFilter;
+          return matchesSearch && matchesSource && matchesStatus;
+        });
+
+        res.sort((a,b) => {
+          let aVal = '', bVal = '';
+          if (sortField === 'companyName') { aVal = a.companyName; bVal = b.companyName; }
+          else if (sortField === 'role') { aVal = a.employees?.[0]?.role || ''; bVal = b.employees?.[0]?.role || ''; }
+          else if (sortField === 'primaryName') { aVal = a.employees?.[0]?.name || ''; bVal = b.employees?.[0]?.name || ''; }
+          else if (sortField === 'value') {
+            aVal = parseFloat((a.value||'').replace(/[^0-9.]/g,'')) || 0;
+            bVal = parseFloat((b.value||'').replace(/[^0-9.]/g,'')) || 0;
+          } else {
+            aVal = (a[sortField]||'').toString(); bVal = (b[sortField]||'').toString();
+          }
+          if (typeof aVal === 'string') { aVal = aVal.toLowerCase(); bVal = bVal.toLowerCase(); }
+          if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+          if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+          return 0;
+        });
+        return res;
+      }, [leads, searchQuery, sourceFilter, statusFilter, sortField, sortDirection]);
+
+      const totalPipelineValue = React.useMemo(() => {
+        const sum = leads.reduce((acc, l) => acc + (parseFloat((l.value||'').replace(/[^0-9.]/g, '')) || 0), 0);
+        return `$${sum.toLocaleString()}`;
+      }, [leads]);
+
+      const handleSave = (formData) => {
+        const initialComments = editLead ? (editLead.comments || []) : [];
+        if (formData.initialComment) {
+          const now = new Date();
+          const timestamp = `${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+          const targetEmp = formData.commentEmployee || formData.employees?.[0]?.name || 'Primary Contact';
+          initialComments.unshift({ id: `c-${Date.now()}`, employeeName: targetEmp, text: formData.initialComment, timestamp });
+        }
+
+        if (editLead) {
+          setLeads(prev => prev.map(l => l.id === editLead.id ? { ...l, ...formData, comments: initialComments } : l));
+          showToast('Lead record updated');
+        } else {
+          const newLead = { id: `lead-${Date.now()}`, ...formData, comments: initialComments };
+          setLeads(prev => [newLead, ...prev]);
+          showToast(`Company "${newLead.companyName}" added successfully`);
+        }
+        setIsModalOpen(false);
+      };
+
+      const handleDelete = (id) => {
+        if (confirm('Delete this lead record?')) {
+          setLeads(prev => prev.filter(l => l.id !== id));
+          showToast('Company record deleted');
+        }
+      };
+
+      const handleAddComment = (leadId, text, employeeName) => {
+        const now = new Date();
+        const timestamp = `${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+        const targetEmp = employeeName || 'Primary Contact';
+        const newC = { id: `c-${Date.now()}`, employeeName: targetEmp, text: text.trim(), timestamp };
+        setLeads(prev => prev.map(l => l.id === leadId ? { ...l, comments: [newC, ...(l.comments||[])] } : l));
+        showToast(`Note assigned to ${targetEmp}`);
+      };
+
+      const handleDeleteComment = (leadId, cId) => {
+        setLeads(prev => prev.map(l => l.id === leadId ? { ...l, comments: (l.comments||[]).filter(c=>c.id!==cId) } : l));
+        showToast('Comment deleted');
+      };
+
+      const exportCSV = () => {
+        const headers = ['Company', 'Primary Role', 'Primary Contact', 'Phone', 'Email', 'Latest Employee Note', 'Source', 'Status', 'Deal Value'];
+        const rows = filteredAndSorted.map(l => {
+          const primary = l.employees?.[0] || {};
+          const latestComment = l.comments?.[0] ? `${l.comments[0].employeeName}: ${l.comments[0].text}` : '';
+          return [`"${l.companyName}"`, `"${primary.role||''}"`, `"${primary.name||''}"`, `"${primary.phone||''}"`, `"${primary.email||''}"`, `"${latestComment}"`, `"${l.source}"`, `"${l.status}"`, `"${l.value||''}"`];
+        });
+        const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a'); link.href = url; link.setAttribute('download', `CRM_Company_Leads.csv`);
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        showToast('Exported leads to CSV file');
+      };
+
+      return (
+        <div className="app-viewport">
+          <div className="ambient-bg-layer">
+            <div className="bg-grid-pattern"></div>
+            <div className="ambient-orb orb-top-left"></div>
+            <div className="ambient-orb orb-top-right"></div>
+          </div>
+
+          <div className="app-container">
+            <header className="top-header">
+              <div className="header-brand-row">
+                <div className="brand-section">
+                  <div className="brand-icon-wrapper">📈</div>
+                  <div className="brand-titles">
+                    <h1>Lead Tracker</h1>
+                    <p>Manage and track your business sales leads</p>
+                  </div>
+                </div>
+                <button className="btn-primary" onClick={() => { setEditLead(null); setIsModalOpen(true); }}>
+                  + Add Lead
+                </button>
+              </div>
+
+              <div className="kpi-metrics-row-5">
+                <div className="kpi-card"><div className="kpi-icon-box kpi-blue">👥</div><div className="kpi-content"><span className="kpi-label">TOTAL LEADS</span><span className="kpi-value">{leads.length}</span></div></div>
+                <div className="kpi-card"><div className="kpi-icon-box kpi-sky">✨</div><div className="kpi-content"><span className="kpi-label">NEW LEADS</span><span className="kpi-value">{leads.filter(l=>l.status===STAGES.NEW_LEAD).length}</span></div></div>
+                <div className="kpi-card"><div className="kpi-icon-box kpi-amber">⏳</div><div className="kpi-content"><span className="kpi-label">CONTACTED</span><span className="kpi-value">{leads.filter(l=>l.status===STAGES.CONTACTED).length}</span></div></div>
+                <div className="kpi-card"><div className="kpi-icon-box kpi-emerald">✅</div><div className="kpi-content"><span className="kpi-label">CONVERTED</span><span className="kpi-value">{leads.filter(l=>l.status===STAGES.CONVERTED).length}</span></div></div>
+                <div className="kpi-card"><div className="kpi-icon-box kpi-green">💵</div><div className="kpi-content"><span className="kpi-label">PIPELINE VALUE</span><span className="kpi-value">{totalPipelineValue}</span></div></div>
+              </div>
+            </header>
+
+            <div className="toolbar">
+              <div className="toolbar-controls">
+                <input className="search-input" placeholder="Search company, contact, notes..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+                <select className="filter-select" value={sourceFilter} onChange={e => setSourceFilter(e.target.value)}>
+                  <option value="All">All Sources</option>
+                  {SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+                <select className="filter-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                  <option value="All">All Statuses</option>
+                  {Object.values(STAGES).map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div>
+                <button className="btn-secondary" style={{ marginRight:'0.5rem' }} onClick={resetSeed}>Reset Sample Data</button>
+                <button className="btn-secondary" onClick={exportCSV}>Export CSV</button>
+              </div>
+            </div>
+
+            <main className="data-table-card">
+              <div className="table-responsive-wrapper">
+                <table className="crm-data-table">
+                  <thead>
+                    <tr>
+                      <th onClick={() => handleSort('companyName')}>Company {sortField === 'companyName' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</th>
+                      <th onClick={() => handleSort('role')}>Role {sortField === 'role' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</th>
+                      <th onClick={() => handleSort('primaryName')}>Lead {sortField === 'primaryName' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</th>
+                      <th>Contact</th>
+                      <th onClick={() => handleSort('source')}>Source {sortField === 'source' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</th>
+                      <th onClick={() => handleSort('status')}>Status {sortField === 'status' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</th>
+                      <th>Comments & Employee Notes</th>
+                      <th style={{ textAlign:'right' }} onClick={() => handleSort('value')}>Deal Value {sortField === 'value' ? (sortDirection === 'asc' ? '▲' : '▼') : ''}</th>
+                      <th style={{ textAlign:'right', width:'90px' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredAndSorted.length > 0 ? (
+                      filteredAndSorted.map(lead => {
+                        const primary = lead.employees?.[0] || {};
+                        const otherCount = (lead.employees?.length || 1) - 1;
+                        const avatar = getAvatarColor(primary.name);
+                        const comments = lead.comments || [];
+                        const latestC = comments[0];
+
+                        return (
+                          <tr key={lead.id} className="table-data-row">
+                            <td><span className="company-name-text">{lead.companyName}</span></td>
+                            <td><span className="role-badge-text">{primary.role || 'Primary Contact'}</span></td>
+                            <td>
+                              <div className="lead-identity-cell">
+                                <div className="lead-avatar-sm" style={{ background: avatar.bg, color: avatar.text, borderColor: avatar.border }}>
+                                  {getInitials(primary.name)}
+                                </div>
+                                <span className="lead-name-text">{primary.name}</span>
+                                {otherCount > 0 && <button className="contacts-count-pill" onClick={() => setDetailsLead(lead)}>+{otherCount}</button>}
+                              </div>
+                            </td>
+                            <td>{primary.phone || primary.email || '—'}</td>
+                            <td><span className="source-badge" data-source={lead.source}>{lead.source}</span></td>
+                            <td><span className="display-status-badge" data-stage={lead.status}>{lead.status}</span></td>
+                            <td>
+                              {latestC ? (
+                                <div className="comment-sheet-preview" onClick={() => setDetailsLead(lead)}>
+                                  💬 <strong>{latestC.employeeName||primary.name}:</strong> {latestC.text.length > 20 ? latestC.text.slice(0,20) + '...' : latestC.text}
+                                </div>
+                              ) : (
+                                <button style={{ border:'none', background:'none', color:'#64748B', cursor:'pointer', fontSize:'0.75rem' }} onClick={() => setDetailsLead(lead)}>+ Add note</button>
+                              )}
+                            </td>
+                            <td style={{ textAlign:'right' }}><span className="deal-value-text">{lead.value || '—'}</span></td>
+                            <td style={{ textAlign:'right' }}>
+                              <button style={{ border:'none', background:'none', cursor:'pointer', marginRight:'0.3rem' }} onClick={() => setDetailsLead(lead)}>💬</button>
+                              <button style={{ border:'none', background:'none', cursor:'pointer', marginRight:'0.3rem' }} onClick={() => { setEditLead(lead); setIsModalOpen(true); }}>✏️</button>
+                              <button style={{ border:'none', background:'none', cursor:'pointer' }} onClick={() => handleDelete(lead.id)}>🗑️</button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr><td colSpan="9" style={{ textAlign:'center', padding:'3rem' }}>No matching company records found</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="table-pagination-footer">
+                <span>Showing <strong>{filteredAndSorted.length}</strong> company leads</span>
+              </div>
+            </main>
+
+            {isModalOpen && <EditModal lead={editLead} onClose={() => setIsModalOpen(false)} onSave={handleSave} />}
+            {detailsLead && <DetailsModal lead={leads.find(l=>l.id===detailsLead.id)||detailsLead} onClose={() => setDetailsLead(null)} onAddComment={handleAddComment} onDeleteComment={handleDeleteComment} />}
+            {toast && <div className="toast-container"><div className="toast">{toast}</div></div>}
+          </div>
+        </div>
+      );
+    }
+
+    function DetailsModal({ lead, onClose, onAddComment, onDeleteComment }) {
+      const [commentText, setCommentText] = React.useState('');
+      const [targetEmp, setTargetEmp] = React.useState('');
+      const primary = lead.employees?.[0] || {};
+      const employees = lead.employees || [];
+      const others = lead.employees?.slice(1) || [];
+
+      return (
+        <div className="modal-overlay" onClick={onClose}>
+          <div className="modal-card" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{lead.companyName}</h2>
+              <button style={{ border:'none', background:'none', cursor:'pointer' }} onClick={onClose}>✕</button>
+            </div>
+            <div className="modal-body modal-scrollable-body">
+              <div style={{ display:'flex', gap:'0.5rem', marginBottom:'0.5rem' }}>
+                <span className="display-status-badge" data-stage={lead.status}>{lead.status}</span>
+                <span className="source-badge" data-source={lead.source}>{lead.source}</span>
+                {lead.value && <strong>{lead.value}</strong>}
+              </div>
+
+              <div className="primary-contact-box">
+                <div>
+                  <strong>{primary.name}</strong> ({primary.role || 'Primary'})<br/>
+                  {primary.phone && <span>☎ {primary.phone} </span>}
+                  {primary.email && <span>✉ {primary.email}</span>}
+                </div>
+              </div>
+
+              {others.length > 0 && (
+                <div>
+                  <h4 style={{ margin:'0.5rem 0' }}>Other Contacts ({others.length})</h4>
+                  {others.map((emp, i) => (
+                    <div key={i} style={{ fontSize:'0.85rem', marginBottom:'0.25rem' }}>
+                      • {emp.name} — {emp.role} {emp.phone ? `(${emp.phone})` : ''} {emp.email}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div style={{ marginTop:'0.75rem' }}>
+                <h4 style={{ marginBottom:'0.5rem' }}>Assign Note to Employee</h4>
+                <form onSubmit={e => { e.preventDefault(); if(commentText.trim()){ onAddComment(lead.id, commentText, targetEmp || primary.name); setCommentText(''); } }}>
+                  <div style={{ marginBottom:'0.35rem' }}>
+                    <select className="form-select" style={{ padding:'0.35rem', fontSize:'0.8rem' }} value={targetEmp || primary.name} onChange={e => setTargetEmp(e.target.value)}>
+                      {employees.map((emp, i) => (
+                        <option key={i} value={emp.name}>Assign to: {emp.name} ({emp.role || 'Contact'})</option>
+                      ))}
+                    </select>
+                  </div>
+                  <textarea className="comment-textarea" placeholder="Write employee specific note..." rows="2" value={commentText} onChange={e=>setCommentText(e.target.value)} />
+                  <button type="submit" className="btn-primary" style={{ marginTop:'0.35rem' }}>Add Comment</button>
+                </form>
+
+                <div className="modal-scrollable-list" style={{ marginTop:'0.75rem', maxHeight:'200px', overflowY:'auto' }}>
+                  {(lead.comments||[]).map(c => (
+                    <div key={c.id} className="timeline-comment-item">
+                      <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.75rem', color:'#64748B' }}>
+                        <span>👤 For <strong>{c.employeeName || primary.name}</strong> • {c.timestamp}</span>
+                        <button style={{ border:'none', background:'none', cursor:'pointer' }} onClick={() => onDeleteComment(lead.id, c.id)}>🗑️</button>
+                      </div>
+                      <div style={{ fontSize:'0.85rem' }}>{c.text}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function EditModal({ lead, onClose, onSave }) {
+      const [companyName, setCompanyName] = React.useState(lead ? lead.companyName : '');
+      const [employees, setEmployees] = React.useState(
+        lead && lead.employees ? lead.employees : [{ name: '', role: 'Sales Manager', phone: '', email: '' }]
+      );
+      const [source, setSource] = React.useState(lead ? lead.source : 'Website');
+      const [status, setStatus] = React.useState(lead ? lead.status : STAGES.NEW_LEAD);
+      const [value, setValue] = React.useState(lead ? lead.value : '');
+      const [initialComment, setInitialComment] = React.useState('');
+      const [commentEmployee, setCommentEmployee] = React.useState('');
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!companyName.trim() || !employees[0].name.trim()) return alert('Company Name and Primary Contact Name are required');
+        const formattedValue = value ? (value.startsWith('$') ? value : `$${value}`) : '';
+        onSave({ companyName: companyName.trim(), employees, source, status, value: formattedValue, initialComment, commentEmployee: commentEmployee || employees[0].name });
+      };
+
+      return (
+        <div className="modal-overlay" onClick={onClose}>
+          <div className="modal-card" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{lead ? 'Edit Company Record' : 'Add New Company Lead'}</h2>
+              <button style={{ border:'none', background:'none', cursor:'pointer' }} onClick={onClose}>✕</button>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="modal-body modal-scrollable-body">
+                <div className="form-group">
+                  <label>Company Name *</label>
+                  <input className="form-input" value={companyName} onChange={e => setCompanyName(e.target.value)} required />
+                </div>
+
+                <div>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', margin:'0.5rem 0' }}>
+                    <label style={{ fontWeight:600 }}>Employees / Contacts ({employees.length})</label>
+                    <button type="button" style={{ border:'none', background:'none', color:'#2563EB', cursor:'pointer' }} onClick={() => setEmployees(p => [...p, { name:'', role:'Team Member', phone:'', email:'' }])}>+ Add Employee</button>
+                  </div>
+
+                  <div className="modal-scrollable-list" style={{ maxHeight:'240px', overflowY:'auto' }}>
+                    {employees.map((emp, idx) => (
+                      <div key={idx} style={{ background:'#F1F5F9', padding:'0.6rem', borderRadius:'6px', marginBottom:'0.5rem' }}>
+                        <div style={{ display:'flex', gap:'0.5rem', marginBottom:'0.4rem' }}>
+                          <input className="form-input" placeholder="Name" value={emp.name} onChange={e => { const copy=[...employees]; copy[idx].name=e.target.value; setEmployees(copy); }} required={idx===0} />
+                          <input className="form-input" placeholder="Role" value={emp.role} onChange={e => { const copy=[...employees]; copy[idx].role=e.target.value; setEmployees(copy); }} />
+                        </div>
+                        <div style={{ display:'flex', gap:'0.5rem' }}>
+                          <input className="form-input" placeholder="Phone" value={emp.phone} onChange={e => { const copy=[...employees]; copy[idx].phone=e.target.value.replace(/\D/g,'').slice(0,11); setEmployees(copy); }} />
+                          <input className="form-input" placeholder="Email" value={emp.email} onChange={e => { const copy=[...employees]; copy[idx].email=e.target.value; setEmployees(copy); }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ display:'flex', gap:'1rem' }}>
+                  <div className="form-group" style={{ flex:1 }}>
+                    <label>Source</label>
+                    <select className="form-select" value={source} onChange={e => setSource(e.target.value)}>
+                      {SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group" style={{ flex:1 }}>
+                    <label>Stage Status</label>
+                    <select className="form-select" value={status} onChange={e => setStatus(e.target.value)}>
+                      {Object.values(STAGES).map(st => <option key={st} value={st}>{st}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Deal Value</label>
+                  <input className="form-input" placeholder="e.g. 4,500" value={value} onChange={e => setValue(e.target.value)} />
+                </div>
+
+                <div className="form-group">
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                    <label>{lead ? 'Add Employee Note' : 'Initial Employee Note'}</label>
+                    {employees.length > 1 && (
+                      <select className="form-select" style={{ padding:'0.2rem', fontSize:'0.75rem', width:'auto' }} value={commentEmployee || employees[0]?.name} onChange={e => setCommentEmployee(e.target.value)}>
+                        {employees.map((emp, i) => <option key={i} value={emp.name}>Assign to: {emp.name}</option>)}
+                      </select>
+                    )}
+                  </div>
+                  <textarea className="comment-textarea" placeholder="Log employee note..." rows="2" value={initialComment} onChange={e => setInitialComment(e.target.value)} />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" onClick={onClose} style={{ padding:'0.6rem 1rem', border:'1px solid #E2E8F0', background:'#FFF', borderRadius:'6px', cursor:'pointer' }}>Cancel</button>
+                <button type="submit" className="btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
